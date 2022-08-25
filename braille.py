@@ -9,8 +9,6 @@
 # 7) pip3 install opencv
 # 8) pip3 install matplotlib
 
-# Upload to GitHub
-
 import numpy as np
 import os
 from PIL import Image
@@ -60,6 +58,8 @@ letterToImgPath = {
     " ": "images/void.png",
 }
 
+directory = "C://Users//saich//Documents//DAs//SEM 7//TARP//braille"
+
 def addImages(list_im):
     imgs = [ PIL.Image.open(i) for i in list_im ]
     min_shape = sorted( [(np.sum(i.size), i.size ) for i in imgs])[0][1]
@@ -82,6 +82,9 @@ def writeText(b_string):
     print(final_string)
 
 def textToBraille(text):
+    if text=="":
+        print("No String input")
+        exit()
     final_string = ''
     for char in text:
         char = char.lower()
@@ -167,7 +170,7 @@ def textToBraille(text):
             final_string = final_string + ascii_braille[char]
             print(char + " " + str(charToArray[" "]))
     print(final_string)
-    return final_string
+    # return final_string
 
 def textToSpeech(text):
     if ((os.system('espeak "' + str(text) + '"')) != 0):
@@ -185,11 +188,21 @@ def brailleToTextArray(array):
 def brailleToSpeechArray(array):
     textToSpeech(brailleToTextArray(array))
 
-def brailleToSpeechImg(imgs):
+def brailleToTextImg(imgs):
+    s = ""
     for img in imgs:
         for chars in letterToImgPath:
             if img == letterToImgPath[chars]:
-                print(chars)
+               s = s+chars
+    textToBraille(s)
+    print(s)
+    return s
+
+def brailleToSpeechImg(imgs):
+    s = brailleToTextImg(imgs)
+    # print(s)
+    # textToBraille(s)
+    textToSpeech(s)
 
 def imageToText(img):
     # print("*")
